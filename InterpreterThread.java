@@ -1,17 +1,18 @@
 import java.util.function.*;
-
-// TODO: Slow down to make playable -- sync with frame rate using queue
+import java.util.concurrent.Callable;
 
 public class InterpreterThread extends Thread
 {
 
     private Interpreter interpreter;
+    private Callable<Boolean> getCycle;
     private boolean killed = false;
     private boolean dead = false;
 
-    public InterpreterThread(long[] code, Function<Long, Void> outputCallback)
+    public InterpreterThread(long[] code, Function<Long, Void> outputCallback, Callable<Long> inputCallback, Callable<Boolean> getCycle)
     {
-        interpreter = new Interpreter(code, ()->GetInput(), outputCallback);
+        interpreter = new Interpreter(code, inputCallback, outputCallback);
+        this.getCycle = getCycle;
     }
 
     @Override
@@ -19,7 +20,12 @@ public class InterpreterThread extends Thread
     {
         while (!interpreter.IsHalted() && !killed)
         {
-            try { interpreter.Step(); } catch (Exception e) {}
+            try 
+            { 
+                if (!getCycle.call()) continue;
+                interpreter.Step(); 
+            } 
+            catch (Exception e) {}
         }
 
         dead = true;
@@ -33,10 +39,5 @@ public class InterpreterThread extends Thread
     public boolean IsDead()
     {
         return dead;
-    }
-
-    public Long GetInput()
-    {
-        return 0l;
     }
 }
