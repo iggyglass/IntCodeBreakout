@@ -6,6 +6,7 @@ public class Screen
     private int height;
     private int score = 0;
     private boolean isDirty = false;
+    private boolean scoreDirty = true;
 
     public enum Tiles
     {
@@ -35,7 +36,8 @@ public class Screen
     {
         if (x == -1 && y == 0)
         {
-            score = tile;
+            if (score < tile) score = tile;
+            scoreDirty = true;
             return;
         }
 
@@ -56,12 +58,23 @@ public class Screen
 
     public int GetScore()
     {
+        scoreDirty = false;
         return score;
     }
 
     public boolean IsDirty()
     {
         return isDirty;
+    }
+
+    public boolean ScoreDirty()
+    {
+        return scoreDirty;
+    }
+
+    public void ResetScore()
+    {
+        score = 0;
     }
 
     public void Print() throws Exception
