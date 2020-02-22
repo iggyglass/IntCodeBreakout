@@ -75,6 +75,7 @@ public class Screen
     public void ResetScore()
     {
         score = 0;
+        scoreDirty = true;
     }
 
     public void Print() throws Exception

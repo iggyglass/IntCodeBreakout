@@ -22,6 +22,6 @@ public final class Parser
 
     public static String GetFirstLine(String path) throws IOException
     {
-        return Files.readAllLines(Paths.get(path)).get(0);
+        return Files.readAllLines(Paths.get(path).toAbsolutePath()).get(0);
     }
 }
