@@ -1,3 +1,8 @@
+// NOTE:
+// Due to the use of lambdas, this sketch requires the (currently) alpha
+// version of Processing 4. P4 can be downloaded here:
+// https://github.com/processing/processing4
+
 InterpreterThread th;
 CycleController cc = new CycleController(17800);
 
